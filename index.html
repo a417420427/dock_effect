@@ -105,10 +105,11 @@
 
         const buttons = document.querySelector('.buttons')
         const buttonChildren = Array.from(document.querySelectorAll('.button'))
-        console.log(buttonChildren, 'bc')
         buttons.addEventListener('click', (e) => {
           if (buttonChildren.includes(e.target)) {
             service.onSwitchPosition(e.target.innerHTML.trim())
+            buttonChildren.forEach(button => button.classList.remove('active'))
+            e.target.classList.add('active')
           }
         })
       }
