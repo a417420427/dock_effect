@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dock</title>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      .buttons {
+        padding-top: 120px;
+        display: flex;
+        justify-content: center;
+      }
+
+      /* CSS */
+      .button {
+        background-color: #e1ecf4;
+        border-radius: 3px;
+        border: 1px solid #7aa7c7;
+        box-shadow: rgba(255, 255, 255, 0.7) 0 1px 0 0 inset;
+        box-sizing: border-box;
+        color: #39739d;
+        cursor: pointer;
+        display: inline-block;
+        font-family: -apple-system, system-ui, 'Segoe UI', 'Liberation Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 1.15385;
+        margin: 0;
+        outline: none;
+        padding: 8px 0.8em;
+        position: relative;
+        text-align: center;
+        text-decoration: none;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        vertical-align: baseline;
+        white-space: nowrap;
+        margin-right: 20px;
+      }
+
+      .button:hover,
+      .button:focus {
+        background-color: #b3d3ea;
+        color: #2c5777;
+      }
+
+      .button:focus {
+        box-shadow: 0 0 0 4px rgba(0, 149, 255, 0.15);
+      }
+
+      .button.active {
+        background-color: #a0c7e4;
+        box-shadow: none;
+        color: #2c5777;
+      }
+
+      .dock-container {
+        position: fixed;
+        transition: transform ease 0.5s;
+        transform: scale(0.8) translateX(-100px);
+        display: flex;
+        justify-content: center;
+      }
+      .dock-container.active {
+        transform: scale(1) translateX(0) !important;
+      }
+     
+      .dock-container.bottom {
+        bottom: 10px;
+        width: 80%;
+        display: flex;
+        flex-direction: row;
+        left: 10%;
+      } 
+    </style>
+  </head>
+  <body>
+    <div class="buttons">
+      <div class="button active">left</div>
+      <div class="button">right</div>
+      <div class="button">top</div>
+      <div class="button">bottom</div>
+    </div>
+    <div class="dock-container left"></div>
+    <script src="./dockService.js"></script>
+    <script>
+      function initDock() {
+        const container = document.querySelector('.dock-container')
+        const cubeCount = randomCount(new Array(10).fill('').map((_, index) => index * 2 + 10))
+        const cubes = new Array(cubeCount).fill('').map(() => getCubeElement())
+
+        cubes.forEach((ele) => container.appendChild(ele))
+        const service = new DockService()
+        service.init(container, cubes)
+
+        const buttons = document.querySelector('.buttons')
+        const buttonChildren = Array.from(document.querySelectorAll('.button'))
+        console.log(buttonChildren, 'bc')
+        buttons.addEventListener('click', (e) => {
+          if (buttonChildren.includes(e.target)) {
+            service.onSwitchPosition(e.target.innerHTML.trim())
+          }
+        })
+      }
+
+      function getCubeElement() {
+        const ele = document.createElement('div')
+        ele.classList.add('cube')
+        ele.style.backgroundColor = randomColor()
+        return ele
+      }
+
+      function randomCount() {
+        const args = [...arguments]
+        const nums = args.flat().filter((f) => typeof f === 'number')
+        return nums[Math.floor(Math.random() * nums.length)]
+      }
+
+      function rndm(max, min = 0) {
+        // [ min, max ]
+        return min + Math.floor(Math.random() * (max - min + 1))
+      }
+      function randomColor() {
+        // Hue Saturation Lightness
+        return `hsl(${rndm(360)},${rndm(100)}%,${rndm(100)}%)`
+      }
+
+      initDock()
+    </script>
+
+    <script></script>
+  </body>
+</html>
+
