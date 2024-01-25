@@ -1,1 +1,1 @@
-# dock_effect
+# 仿MAC 菜单栏神奇效果
