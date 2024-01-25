@@ -188,7 +188,7 @@ class DockService {
     }
   }
   listenMousePosition() {
-    document.addEventListener('mousemove', this.mousemoveListener)
+    document.addEventListener('mousemove', this.mousemoveListener.bind(this))
   }
 
   getCubeWidth() {
